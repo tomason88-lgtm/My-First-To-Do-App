@@ -18,10 +18,6 @@ def edit_todo():
     funcy.write_todos(todos)
 
 
-''' 
-  Local URL: http://localhost:8502
-  Network URL: http://192.168.1.185:8502
-'''
 
 
 st.title('נו מה לעשות?')
