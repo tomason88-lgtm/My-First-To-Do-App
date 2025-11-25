@@ -1,32 +1,29 @@
 import streamlit as st
 import funcy
+# To run - write in terminal: streamlit run web.py
 
 todos = funcy.get_todos()
 
 
 def add_todo():
     todo_loc = st.session_state['new_todo'] + '\n'
-    todo_loc = todo_loc.capitalize()
+    todo_loc = todo_loc.title()
     todos.append(todo_loc)
     funcy.write_todos(todos)
 
 
-def edit_todo():
-    todo_loc = st.session_state['edit_todo'] + '\n'
-    todo_loc = todo_loc.capitalize()
-    todos.append(todo_loc)
-    funcy.write_todos(todos)
+# Gemini suggestion
 
 
 
-
-st.title('נו מה לעשות?')
+st.title('What should I do?')
 st.subheader("This is my to-do app")
 st.write('This app is to increase your productivity')
 
-st.text_input(label=" ", placeholder='Add a new to do',
+st.text_input(label=" ", placeholder='Add a new to-do',
               on_change=add_todo, key='new_todo')
 
+# Define buttons:
 col1, col2 = st.columns([1, 1])
 
 with col1:
@@ -47,13 +44,25 @@ with col2:
                                 width='content'
                                 )
 
+# Make list of todos and use buttons:
 for index, todo in enumerate(todos):
     checkbox = st.checkbox(todo, key=todo)
+
+
+    def edit_todo(i=index):
+        new_todo = st.session_state[f'edit_text_{i}']
+        todo_loc = new_todo.title() + '\n'
+        todos[i] = todo_loc
+        funcy.write_todos(todos)
+        st.rerun()
     if checkbox:
         if edit_button:
-            edited = st.text_input(label=" ", placeholder=f"{todo}",
-                                   on_change=edit_todo, key='edit_todo')
-            todos[index] = edited
+            st.text_input(
+                label=" ",
+                placeholder=f"Enter new text for: {todo.strip()}",
+                on_change=edit_todo,  # Call our new replacement function
+                key=f'edit_text_{index}'  # Unique key for each edit box
+            )
 
         elif complete_button:
             todos.pop(index)
