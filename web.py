@@ -54,7 +54,6 @@ for index, todo in enumerate(todos):
         todo_loc = new_todo.title() + '\n'
         todos[i] = todo_loc
         funcy.write_todos(todos)
-        st.rerun()
     if checkbox:
         if edit_button:
             st.text_input(
